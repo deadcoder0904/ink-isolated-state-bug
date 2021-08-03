@@ -1,28 +1,41 @@
 import React from 'react'
-import { Box, Text } from 'ink'
+import { Box, Text, useApp } from 'ink'
 
 import { state } from './state'
 import { Input } from './Input'
 
-const App = () => (
-	<Box flexDirection="column">
-		<Text color="#A78BFA">Compose New Post</Text>
+const App = () => {
+	const [fieldNo, setFieldNo] = React.useState(1)
+	const { exit } = useApp()
 
-		<Input
-			label="Title"
-			onSubmit={(title) => {
-				state.title = title
-			}}
-		/>
+	React.useEffect(() => {
+		if (fieldNo === 3) exit()
+	}, [fieldNo])
 
-		<Input
-			label="Description"
-			onSubmit={(description) => {
-				state.description = description
-			}}
-		/>
-	</Box>
-)
+	return (
+		<Box flexDirection="column">
+			<Text color="#A78BFA">Compose New Post</Text>
+
+			<Input
+				label="Title"
+				focus={fieldNo === 1}
+				onSubmit={(title) => {
+					state.title = title
+					setFieldNo(2)
+				}}
+			/>
+
+			<Input
+				focus={fieldNo === 2}
+				label="Description"
+				onSubmit={(description) => {
+					state.description = description
+					setFieldNo(3)
+				}}
+			/>
+		</Box>
+	)
+}
 
 module.exports = App
 export default App
